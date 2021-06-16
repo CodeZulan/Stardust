@@ -31,6 +31,9 @@ plugins/
 NTD/
 Texture Studio Server/
 
+# ENV Info
+pawn-env.txt
+
 # binaries
 *.exe
 *.dll
