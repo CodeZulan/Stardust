@@ -48,3 +48,23 @@ YCMD:shout(playerid, params[], help){
     SendFadingMessage(playerid, fstring, MESSAGE_LOCAL*1.5);
     return 1;
 }
+
+YCMD:b(playerid, params[], help) = ooc;
+
+YCMD:ooc(playerid, params[], help){
+    static message[MAX_STRING];
+
+    if(help){
+        SendCustomMessage(playerid, MESSAGE_HELP, "/ooc automatically encloses your message with (( )) to identify it as out-of-character.");
+        return 1;
+    }
+
+    if(sscanf(params, "s[256]", message)){
+        SendCustomMessage(playerid, MESSAGE_USAGE, "/ooc [message].");
+        SendCustomMessage(playerid, MESSAGE_SAMPLE, " (( %s says: Add me on discord. ))", GetPlayerNameEx(playerid, false));
+        return 1;
+    }
+
+    SendClientMessageEx(playerid, COLOR_CADETBLUE, MESSAGE_LOCAL, " (( %s says: %s ))", GetPlayerNameEx(playerid, false), message);
+    return 1;
+}
