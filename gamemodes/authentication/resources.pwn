@@ -157,13 +157,13 @@ public OnPlayerFinishedDownloading(playerid, virtualworld){
     if(IsPlayerDownloading[playerid] == PLAYER_DOWNLOADING){
         DownloadScreenTD(playerid, false);
 
-        mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT u_id FROM users WHERE u_name = '%s'", GetPlayerNameEx(playerid));
+        mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT u_id FROM users WHERE u_name = '%e'", GetPlayerNameEx(playerid));
         mysql_tquery(SQL_Handle, SQL_Buffer, "AccountCheck", "i", playerid);
 
         IsPlayerDownloading[playerid] = PLAYER_NOT_DOWNLOADING;
     }
     else if(IsPlayerDownloading[playerid] == PLAYER_ALREADY_DOWNLOADED){
-        mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT u_id FROM users WHERE u_name = '%s'", GetPlayerNameEx(playerid));
+        mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT u_id FROM users WHERE u_name = '%e'", GetPlayerNameEx(playerid));
         mysql_tquery(SQL_Handle, SQL_Buffer, "AccountCheck", "i", playerid);
 
         IsPlayerDownloading[playerid] = PLAYER_NOT_DOWNLOADING;

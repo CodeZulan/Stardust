@@ -72,7 +72,7 @@ SendCustomMessage(playerid, type, const fmat[], va_args<>){
         return SendClientMessageStr(playerid, COLOR_YELLOW, str_format("USAGE: "COL_WHITE"%s", message));
     }
     else if(type == MESSAGE_SAMPLE){
-        return SendClientMessageStr(playerid, COLOR_AQUA, str_format("SAMPLE: "COL_WHITE"%s", message));
+        return SendClientMessageStr(playerid, COLOR_AQUA, str_format("E.G.: "COL_WHITE"%s", message));
     }
     return SendClientMessage(playerid, -1, message);
 }

@@ -1,7 +1,8 @@
 #include <YSI_Coding\y_hooks>
 
 new
-    User_ID[MAX_PLAYERS];
+    User_ID[MAX_PLAYERS],
+    User_Remember_Password[MAX_PLAYERS];
 
 new
     Character_Name[MAX_PLAYERS][MAX_PLAYER_NAME+1],

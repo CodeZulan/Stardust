@@ -19,7 +19,9 @@ new
     PlayerText:Exit_Button[MAX_PLAYERS];
 
 new
-    Temp_Login_Password_Value[MAX_PLAYERS];
+    Temp_Login_Password_Value[MAX_PLAYERS][MAX_STRING],
+    bool:Temp_Remember_Password_Value[MAX_PLAYERS],
+    Temp_Fetched_IP[MAX_PLAYERS][MAX_STRING];
 
 hook OnPlayerConnect(playerid){
     Login_Box[playerid][0] = CreatePlayerTextDraw(playerid, 473.000000, 131.000000, "_");
@@ -311,6 +313,23 @@ LoginScreenTD(playerid, toggle=true){
 
 hook OnPlayerConnect(playerid){
     format(Temp_Login_Password_Value[playerid], MAX_STRING, "Enter_Your_Password");
+    Temp_Remember_Password_Value[playerid] = false;
+    return 1;
+}
+
+forward OnPlayerFetchIP(playerid);
+public OnPlayerFetchIP(playerid){
+    cache_get_value_name(0, "u_ip", Temp_Fetched_IP[playerid]);
+    cache_get_value_name_int(0, "u_rempass", User_Remember_Password[playerid]);
+
+    if(!strcmp(Temp_Fetched_IP[playerid], GetPlayerIPAddress(playerid))){
+        if(User_Remember_Password[playerid]){
+            mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT * FROM char_info WHERE u_id = %d", User_ID[playerid]);
+            mysql_tquery(SQL_Handle, SQL_Buffer, "OnPlayerLoggedIn", "i", playerid);
+            return 1;
+        }
+    }
+    LoginScreenTD(playerid);
     return 1;
 }
 
@@ -321,6 +340,20 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
     else if(playertextid == Login_Button[playerid]){
         mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT u_password FROM users WHERE u_id = %d", User_ID[playerid]);
         mysql_tquery(SQL_Handle, SQL_Buffer, "OnPlayerClickLogin", "i", playerid);
+    }
+    else if(playertextid == Remember_Password_Button[playerid]){
+        if(Temp_Remember_Password_Value[playerid]){
+            PlayerTextDrawHide(playerid, Remember_Password_Button[playerid]);
+            PlayerTextDrawColor(playerid, Remember_Password_Button[playerid], COLOR_WHITE);
+            PlayerTextDrawShow(playerid, Remember_Password_Button[playerid]);
+            Temp_Remember_Password_Value[playerid] = false;
+        }
+        else{
+            PlayerTextDrawHide(playerid, Remember_Password_Button[playerid]);
+            PlayerTextDrawColor(playerid, Remember_Password_Button[playerid], COLOR_LIME);
+            PlayerTextDrawShow(playerid, Remember_Password_Button[playerid]);
+            Temp_Remember_Password_Value[playerid] = true;
+        }
     }
     return 1;
 }
@@ -342,6 +375,11 @@ public OnLoginPasswordCheck(playerid){
 
 forward OnPlayerLoggedIn(playerid);
 public OnPlayerLoggedIn(playerid){
+    if(Temp_Remember_Password_Value[playerid]){
+        mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "UPDATE users SET u_rempass = %d WHERE u_id = %d", Temp_Remember_Password_Value[playerid], User_ID[playerid]);
+        mysql_tquery(SQL_Handle, SQL_Buffer);
+    }
+
     SetPVarInt(playerid, "IsPlayerLoggingIn", 0);
     LoginScreenTD(playerid, false);
 

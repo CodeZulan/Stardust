@@ -101,8 +101,9 @@ public AccountCheckingResults(playerid, bool:registered){
     SetPlayerVirtualWorld(playerid, playerid + PLAYER_BUFFER);
 
     if(registered){
-        LoginScreenTD(playerid);
-        
+        mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT u_ip, u_rempass FROM users WHERE u_id = %d", User_ID[playerid]);
+        mysql_tquery(SQL_Handle, SQL_Buffer, "OnPlayerFetchIP", "i", playerid);
+
         SetPlayerPos(playerid, 1994.5153, 1571.8406, 85.7995);
         SetPlayerInterior(playerid, 0);
         SetPlayerCameraPos(playerid, 1994.5153, 1571.8406, 91.7995);
