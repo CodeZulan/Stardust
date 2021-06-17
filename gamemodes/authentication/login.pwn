@@ -21,9 +21,14 @@ new
 new
     Temp_Login_Password_Value[MAX_PLAYERS][MAX_STRING],
     bool:Temp_Remember_Password_Value[MAX_PLAYERS],
-    Temp_Fetched_IP[MAX_PLAYERS][MAX_STRING];
+    Temp_Fetched_IP[MAX_PLAYERS][MAX_STRING],
+    Temp_Attempts[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid){
+    static attempts[MAX_STRING];
+
+    Temp_Attempts[playerid] = 3;
+
     Login_Box[playerid][0] = CreatePlayerTextDraw(playerid, 473.000000, 131.000000, "_");
     PlayerTextDrawFont(playerid, Login_Box[playerid][0], 1);
     PlayerTextDrawLetterSize(playerid, Login_Box[playerid][0], 0.645833, 25.600006);
@@ -164,6 +169,7 @@ hook OnPlayerConnect(playerid){
     PlayerTextDrawSetProportional(playerid, Login_Button[playerid], 1);
     PlayerTextDrawSetSelectable(playerid, Login_Button[playerid], 1);
 
+    format(attempts, MAX_STRING, "Attempts:_%d", Temp_Attempts[playerid]);
     Login_Attempts[playerid] = CreatePlayerTextDraw(playerid, 549.000000, 328.000000, "Attempts:_3");
     PlayerTextDrawFont(playerid, Login_Attempts[playerid], 1);
     PlayerTextDrawLetterSize(playerid, Login_Attempts[playerid], 0.437500, 2.000000);
@@ -371,6 +377,26 @@ public OnLoginPasswordCheck(playerid){
         mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT * FROM char_info WHERE u_id = %d", User_ID[playerid]);
         mysql_tquery(SQL_Handle, SQL_Buffer, "OnPlayerLoggedIn", "i", playerid);
     }
+    else{
+        static attempts[MAX_STRING];
+
+        Temp_Attempts[playerid]--;
+
+        if(!Temp_Attempts[playerid]){
+            SendClientMessage(playerid, COLOR_AQUA,         "- - - - - - - - - - - - - [ NOTICE ] - - - - - - - - - - - - -");
+            SendClientMessage(playerid, COLOR_RED,          "                You have been kicked!");
+            SendClientMessage(playerid, COLOR_LIMEGREEN,    "  Reason: "COL_WHITE"Maximum failed login attempts.");
+            SendClientMessage(playerid, COLOR_AQUA,         "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+            wait_ms(1000);
+            Kick(playerid);
+            return 1;
+        }
+        static const body[] = "You have entered a wrong password.";
+        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Authentication Error", body, "Back", "");
+        format(attempts, MAX_STRING, "Attempts:_%d", Temp_Attempts[playerid]);
+        PlayerTextDrawSetString(playerid, Login_Attempts[playerid], attempts);
+    }
+    return 1;
 }
 
 forward OnPlayerLoggedIn(playerid);
