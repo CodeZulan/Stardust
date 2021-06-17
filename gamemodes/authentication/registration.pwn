@@ -34,10 +34,7 @@ new
 static Cutscene_Plane[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid){
-    static string[MAX_STRING];
     format(Temp_Captcha_Value[playerid][0], MAX_STRING, GetRandomCode(10));
-    format(string, MAX_STRING, "Enter:_%s", Temp_Captcha_Value[playerid][0]);
-    Cutscene_Plane[playerid] = CreateDynamicObject(1683, 1478.992187, 1718.191162, 15.747529, 0.000000, 0.000000, -91.699966, -1, -1, playerid, 500.00, 500.00);
 
     Form_Background[playerid] = CreatePlayerTextDraw(playerid, 319.000000, 122.000000, "_");
     PlayerTextDrawFont(playerid, Form_Background[playerid], 1);
@@ -223,7 +220,7 @@ hook OnPlayerConnect(playerid){
     PlayerTextDrawSetProportional(playerid, Captcha_Label[playerid], 1);
     PlayerTextDrawSetSelectable(playerid, Captcha_Label[playerid], 0);
 
-    Code_Label[playerid] = CreatePlayerTextDraw(playerid, 319.000000, 339.000000, string);
+    Code_Label[playerid] = CreatePlayerTextDrawEx(playerid, 319.000000, 339.000000, "Enter:_%s", Temp_Captcha_Value[playerid][0]);
     PlayerTextDrawFont(playerid, Code_Label[playerid], 1);
     PlayerTextDrawLetterSize(playerid, Code_Label[playerid], 0.387499, 1.700000);
     PlayerTextDrawTextSize(playerid, Code_Label[playerid], 400.000000, 17.000000);
@@ -674,6 +671,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
             Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_RED"[ERROR]: "COL_WHITE"There is an error with the captcha code.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"The code you entered is incorrect.");
             return 1;
         }
+        Cutscene_Plane[playerid] = CreateDynamicObject(1683, 1478.992187, 1718.191162, 15.747529, 0.000000, 0.000000, -91.699966, -1, -1, playerid, 500.00, 500.00);
+
         SetPlayerSkin(playerid, Temp_Skin_Value[playerid]);
 
         SpawnPlayer(playerid);

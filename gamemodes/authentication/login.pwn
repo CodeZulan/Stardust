@@ -25,8 +25,6 @@ new
     Temp_Attempts[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid){
-    static attempts[MAX_STRING];
-
     Temp_Attempts[playerid] = 3;
 
     Login_Box[playerid][0] = CreatePlayerTextDraw(playerid, 473.000000, 131.000000, "_");
@@ -169,8 +167,7 @@ hook OnPlayerConnect(playerid){
     PlayerTextDrawSetProportional(playerid, Login_Button[playerid], 1);
     PlayerTextDrawSetSelectable(playerid, Login_Button[playerid], 1);
 
-    format(attempts, MAX_STRING, "Attempts:_%d", Temp_Attempts[playerid]);
-    Login_Attempts[playerid] = CreatePlayerTextDraw(playerid, 549.000000, 328.000000, "Attempts:_3");
+    Login_Attempts[playerid] = CreatePlayerTextDrawEx(playerid, 549.000000, 328.000000, "Attempts:_%d", Temp_Attempts[playerid]);
     PlayerTextDrawFont(playerid, Login_Attempts[playerid], 1);
     PlayerTextDrawLetterSize(playerid, Login_Attempts[playerid], 0.437500, 2.000000);
     PlayerTextDrawTextSize(playerid, Login_Attempts[playerid], 400.000000, 17.000000);
@@ -393,8 +390,6 @@ public OnLoginPasswordCheck(playerid){
         mysql_tquery(SQL_Handle, SQL_Buffer, "OnPlayerLoggedIn", "i", playerid);
     }
     else{
-        static attempts[MAX_STRING];
-
         Temp_Attempts[playerid]--;
 
         if(!Temp_Attempts[playerid]){
@@ -406,9 +401,8 @@ public OnLoginPasswordCheck(playerid){
             Kick(playerid);
             return 1;
         }
-        Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Authentication Error", "You have entered a wrong password.");
-        format(attempts, MAX_STRING, "Attempts:_%d", Temp_Attempts[playerid]);
-        PlayerTextDrawSetString(playerid, Login_Attempts[playerid], attempts);
+        Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Authentication Error", "You have entered a wrong password.", "Back");
+        PlayerTextDrawSetStringEx(playerid, Login_Attempts[playerid], "Attempts:_%d", Temp_Attempts[playerid]);
     }
     return 1;
 }
