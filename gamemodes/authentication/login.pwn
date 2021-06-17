@@ -341,7 +341,22 @@ public OnPlayerFetchIP(playerid){
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
     if(playertextid == Login_Password_Box[playerid]){
-        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_LOGIN_PASSWORD_TD], DIALOG_STYLE_PASSWORD, "Registration", "Enter your account password", "Continue", "Back");
+        inline OnPlayerEnterPassword(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                if(!strlen(inputtext)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Login Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Input for account password is empty.", inputtext);
+                    return 1;
+                }
+                if(strlen(inputtext) > 16){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Login Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Input for account password is too long.", HidePassword(strlen(inputtext)));
+                    return 1;
+                }
+                PlayerTextDrawSetString(playerid, Login_Password_Box[playerid], HidePassword(strlen(inputtext)));
+                format(Temp_Login_Password_Value[playerid], MAX_STRING, inputtext);
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerEnterPassword, DIALOG_STYLE_PASSWORD, "Login", "Enter your account password", "Continue", "Back");
     }
     else if(playertextid == Login_Button[playerid]){
         mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT u_password FROM users WHERE u_id = %d", User_ID[playerid]);
@@ -391,8 +406,7 @@ public OnLoginPasswordCheck(playerid){
             Kick(playerid);
             return 1;
         }
-        static const body[] = "You have entered a wrong password.";
-        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Authentication Error", body, "Back", "");
+        Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Authentication Error", "You have entered a wrong password.");
         format(attempts, MAX_STRING, "Attempts:_%d", Temp_Attempts[playerid]);
         PlayerTextDrawSetString(playerid, Login_Attempts[playerid], attempts);
     }
@@ -426,25 +440,4 @@ public OnPlayerLoggedIn(playerid){
     TogglePlayerControllable(playerid, true);
 
     SetPVarInt(playerid, "IsPlayerLoggedIn", 1);
-}
-
-hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]){
-    if(dialogid == Dialog_ID[DIALOG_LOGIN_PASSWORD_TD]){
-        static body[MAX_STRING];
-        if(response){
-            if(!strlen(inputtext)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Input for account password is empty.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Login Error!", body, "Back", "");
-                return 1;
-            }
-            if(strlen(inputtext) > 16){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Input for account password is too long.", HidePassword(strlen(inputtext)));
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Login Error!", body, "Back", "");
-                return 1;
-            }
-            PlayerTextDrawSetString(playerid, Login_Password_Box[playerid], HidePassword(strlen(inputtext)));
-            format(Temp_Login_Password_Value[playerid], MAX_STRING, inputtext);
-        }
-    }
-    return 1;
 }

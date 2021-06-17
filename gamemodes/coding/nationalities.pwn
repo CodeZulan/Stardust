@@ -110,3 +110,13 @@ new const nationalities[][] = {
     "Zambian",
     "Zimbabwean"
 };
+
+nationality_list(){
+    static list[MAX_STRING], string[MAX_STRING];
+    format(list, MAX_STRING, "");
+    for(new i; i < sizeof(nationalities); i++){
+        format(string, MAX_STRING, "%s\n", nationalities[i]);
+        strcat(list, string);
+    }
+    return list;
+}

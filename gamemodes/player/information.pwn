@@ -35,6 +35,14 @@ hook OnPlayerConnect(playerid){
     return 1;
 }
 
+new const personalities[] = "\
+    Charismatic\n\
+    Extrovert\n\
+    Introvert\n\
+    Intelligent\n\
+    Skillful\
+";
+
 hook function SetPlayerPos(playerid, Float:x, Float:y, Float:z){
     if(GetPVarInt(playerid, "IsPlayerLoggedIn")){
         mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "UPDATE char_info SET char_pos_x = %f, char_pos_y = %f, char_pos_z = %f WHERE u_id = %d", x, y, z, User_ID[playerid]);

@@ -1,1 +1,0 @@
-#define RandomEx(%0,%1) (random(%1 - %0 + 1) + %0)

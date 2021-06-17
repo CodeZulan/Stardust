@@ -22,8 +22,11 @@
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_CACHE_MESSAGE
 #define YSI_NO_VERSION_CHECK
+#define YSI_YES_HEAP_MALLOC
 // -- {Includes}
 #include <YSI_Visual\y_commands>
+#include <YSI_Visual\y_dialog>
+#include <YSI_Coding\y_va>
 // ----------------------------------
 #include <a_mysql>
 #include <bcrypt>
@@ -44,7 +47,7 @@ new bool:ServerInitiated;
 // ---------
 // - {Coding Submodule}
 #include "coding/constants.pwn"
-#include "coding/macros.pwn"
+#include "coding/extensions.pwn"
 #include "coding/nationalities.pwn"
 #include "coding/colors.pwn"
 #include "coding/dialogs.pwn"

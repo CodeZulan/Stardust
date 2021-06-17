@@ -573,22 +573,160 @@ hook OnPlayerConnect(playerid){
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
     if(playertextid == Name_Value_TD[playerid]){
-        ShowDialogToPlayer(playerid, Dialog_ID[DIALOG_NAME_TD]);
+        inline OnPlayerChooseName(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                if(!strlen(inputtext)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name is empty.", inputtext);
+                    return 1;
+                }
+                if(strlen(inputtext) < 5 || strlen(inputtext) > 16){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name does not follow the character limit.", inputtext);
+                    return 1;
+                }
+                if(HasNumeric(inputtext)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name cannot contain numerical digits.", inputtext);
+                    return 1;
+                }
+                for(new i; i < strlen(inputtext); i++){
+                    if(inputtext[i] == '_'){
+                        if(i == 0){
+                            Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name cannot start with an underscore '_'.", inputtext);
+                            return 1;
+                        }
+                        if(i == strlen(inputtext)-1){
+                            Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name cannot end with an underscore '_'.", inputtext);
+                            return 1;
+                        }
+                        if(inputtext[i+1] == '_'){
+                            Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Underscores cannot be successive.", inputtext);
+                            return 1;
+                        }
+                    }
+                }
+
+                SetPlayerName(playerid, inputtext);
+                PlayerTextDrawSetString(playerid, Name_Value_TD[playerid], inputtext);
+                PlayerTextDrawSetString(playerid, Subtitle[playerid], inputtext);
+                format(Temp_Name_Value[playerid], MAX_STRING, inputtext);
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerChooseName, DIALOG_STYLE_INPUT, "Character Creation", ""COL_LIMEGREEN"Enter your character's Name\n\n"COL_AQUA"[TIP]: "COL_WHITE"The character name can also be changed In-Characterly at the LVSA or \n"COL_WHITE"Las Venturas Statistics Authority find out the location ICly.\n\n"COL_PURPLE"[EXAMPLE]: "COL_WHITE"John_Smith", "Enter", "Back");
     }
     else if(playertextid == Age_Value_TD[playerid]){
-        ShowDialogToPlayer(playerid, Dialog_ID[DIALOG_AGE_TD]);
+        inline OnPlayerChooseAge(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                if(!strlen(inputtext)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character age.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character age is empty.", inputtext);
+                    return 1;
+                }
+                if(!IsNumeric(inputtext)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character age.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character age is not numeric.", inputtext);
+                    return 1;
+                }
+                if(!IsInBetween(strval(inputtext), 18, 99)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character age.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character age must be greater than 17 and less than 99.", inputtext);
+                    return 1;
+                }
+                PlayerTextDrawSetString(playerid, Age_Value_TD[playerid], inputtext);
+                format(Temp_Age_Value[playerid], MAX_STRING, inputtext);
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerChooseAge, DIALOG_STYLE_INPUT, "Character Creation", ""COL_LIMEGREEN"Enter your character's Age\n\n"COL_AQUA"[TIP]: "COL_WHITE"The age can also be changed In-Characterly at the LVSA or\nLas Venturas Statistics Authority if you want to change your birthdate.\nFInd out the location ICly.\n\n"COL_PURPLE"[EXAMPLE]: "COL_WHITE"23", "Enter", "Back");
     }
     else if(playertextid == Sex_Value_TD[playerid]){
-        ShowDialogToPlayer(playerid, Dialog_ID[DIALOG_SEX_TD][0]);
+        inline OnPlayerChooseSex(response, listitem, string:inputtext[]){
+            #pragma unused inputtext, listitem
+            if(response){
+                inline OnPlayerSelectSex(response2, listitem2, string:inputtext2[]){
+                    #pragma unused inputtext2
+                    if(response2){
+                        if(listitem2 == 0){
+                            PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Male");
+                            format(Temp_Sex_Value[playerid], MAX_STRING, "Male");
+                        }
+                        else if(listitem2 == 1){
+                            PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Female");
+                            format(Temp_Sex_Value[playerid], MAX_STRING, "Female");
+                        }
+                    }
+                }
+                Dialog_ShowCallback(playerid, using inline OnPlayerSelectSex, DIALOG_STYLE_LIST, "Character Creation", "Male\nFemale", "Enter", "Back");
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerChooseSex, DIALOG_STYLE_MSGBOX, "Character Creation", ""COL_LIMEGREEN"Choose your character's Sex\n\n"COL_ORANGE"[WARNING]: "COL_WHITE"Choosing your character's sex cannot be changed later,\nyou can only choose for your character's sex now.", "Enter", "Back");
     }
     else if(playertextid == Nationality_Value_TD[playerid]){
-        ShowDialogToPlayer(playerid, Dialog_ID[DIALOG_NATIONALITY_TD][0]);
+        inline OnPlayerChooseNationality(response, listitem, string:inputtext[]){
+            #pragma unused inputtext, listitem
+            if(response){
+                inline OnPlayerSelectNationality(response2, listitem2, string:inputtext2[]){
+                    #pragma unused inputtext2
+                    if(response2){
+                        for(new i; i < sizeof(nationalities); i++){
+                            if(listitem2 == i){
+                                PlayerTextDrawSetString(playerid, Nationality_Value_TD[playerid], nationalities[i]);
+                                format(Temp_Nationality_Value[playerid], MAX_STRING, nationalities[i]);
+                            }
+                        }
+                    }
+                }
+                Dialog_ShowCallback(playerid, using inline OnPlayerSelectNationality, DIALOG_STYLE_LIST, "Character Creation", nationality_list(), "Enter", "Back");
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerChooseNationality, DIALOG_STYLE_MSGBOX, "Character Creation", ""COL_LIMEGREEN"Choose your character's Nationality\n\n"COL_ORANGE"[TIP]: "COL_WHITE"The character's nationality can also be changed at the LVDFA or \nLas Venturas Department of Foreign Affairs find out the location ICly.", "Enter", "Back");
     }
     else if(playertextid == Personality_Value_TD[playerid]){
-        ShowDialogToPlayer(playerid, Dialog_ID[DIALOG_PERSONALITY_TD][0]);
+        inline OnPlayerChoosePersonality(response, listitem, string:inputtext[]){
+            #pragma unused inputtext, listitem
+            if(response){
+                inline OnPlayerSelectPersonality(response2, listitem2, string:inputtext2[]){
+                    #pragma unused inputtext2
+                    if(response2){
+                        if(listitem2 == 0){
+                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Charismatic");
+                            format(Temp_Personality_Value[playerid], MAX_STRING, "Charismatic");
+                        }
+                        else if(listitem2 == 1){
+                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Extrovert");
+                            format(Temp_Personality_Value[playerid], MAX_STRING, "Extrovert");
+                        }
+                        else if(listitem2 == 2){
+                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Introvert");
+                            format(Temp_Personality_Value[playerid], MAX_STRING, "Introvert");
+                        }
+                        else if(listitem2 == 3){
+                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Intelligent");
+                            format(Temp_Personality_Value[playerid], MAX_STRING, "Intelligent");
+                        }
+                        else if(listitem2 == 4){
+                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Skillful");
+                            format(Temp_Personality_Value[playerid], MAX_STRING, "Skillful");
+                        }
+                    }
+                }
+                Dialog_ShowCallback(playerid, using inline OnPlayerSelectPersonality, DIALOG_STYLE_LIST, "Character Creation", personalities, "Enter", "Back");
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerChoosePersonality, DIALOG_STYLE_MSGBOX, "Character Creation", ""COL_LIMEGREEN"Choose your character's Personality\n\n"COL_ORANGE"[TIP]: "COL_WHITE"The character's personality can also be later using /settings.", "Enter", "Back");
     }
     else if(playertextid == Religion_Value_TD[playerid]){
-        ShowDialogToPlayer(playerid, Dialog_ID[DIALOG_RELIGION_TD]);
+        inline OnPlayerChooseReligion(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                if(!strlen(inputtext)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character religion.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character religion is empty, setting it to \"None\".", inputtext);
+                    return 1;
+                }
+                PlayerTextDrawSetString(playerid, Religion_Value_TD[playerid], inputtext);
+                format(Temp_Religion_Value[playerid], MAX_STRING, inputtext);
+            }
+            else{
+                PlayerTextDrawSetString(playerid, Religion_Value_TD[playerid], Temp_Religion_Value[playerid]);
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerChooseReligion, DIALOG_STYLE_INPUT, "Character Creation", "Enter your character's Religion", "Enter", "Back");
     }
     else if(playertextid == Character_Button_TD[playerid][0]){
         Character_Model[playerid]--;
@@ -621,25 +759,20 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         PlayerTextDrawShow(playerid, Character_Model_TD[playerid]);
     }
     else if(playertextid == Continue_Button_TD[playerid]){
-        static body[MAX_STRING];
         if(!strcmp(Temp_Age_Value[playerid], "Age")){
-            format(body, MAX_STRING, ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's age yet.");
-            ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
+            Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's age yet.", "Back");
             return 1;
         }
         if(!strcmp(Temp_Sex_Value[playerid], "Sex")){
-            format(body, MAX_STRING, ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's sex yet.");
-            ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
+            Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's sex yet.", "Back");
             return 1;
         }
         if(!strcmp(Temp_Nationality_Value[playerid], "Nationality")){
-            format(body, MAX_STRING, ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's nationality yet.");
-            ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
+            Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's nationality yet.", "Back");
             return 1;
         }
         if(!strcmp(Temp_Personality_Value[playerid], "Personality")){
-            format(body, MAX_STRING, ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's personality yet.");
-            ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
+            Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's personality yet.", "Back");
             return 1;
         }
 
@@ -648,137 +781,6 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         PlayerTextDrawSetPreviewModel(playerid, Character_Preview_TD2[playerid], Temp_Skin_Value[playerid]);
         CharacterCustomizationTD(playerid, false);
         AccountRegistrationTD(playerid);
-    }
-    return 1;
-}
-
-hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]){
-    if(dialogid == Dialog_ID[DIALOG_NAME_TD]){
-        if(response){
-            static body[MAX_STRING];
-            if(!strlen(inputtext)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name is empty.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                return 1;
-            }
-            if(strlen(inputtext) < 5 || strlen(inputtext) > 16){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name does not follow the character limit.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                return 1;
-            }
-            if(HasNumeric(inputtext)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name cannot contain numerical digits.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                return 1;
-            }
-            for(new i; i < strlen(inputtext); i++){
-                if(inputtext[i] == '_'){
-                    if(i == 0){
-                        format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name cannot start with an underscore '_'.", inputtext);
-                        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                        return 1;
-                    }
-                    if(i == strlen(inputtext)-1){
-                        format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character name cannot end with an underscore '_'.", inputtext);
-                        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                        return 1;
-                    }
-                    if(inputtext[i+1] == '_'){
-                        format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character name.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Underscores cannot be successive.", inputtext);
-                        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                        return 1;
-                    }
-                }
-            }
-
-            SetPlayerName(playerid, inputtext);
-            PlayerTextDrawSetString(playerid, Name_Value_TD[playerid], inputtext);
-            PlayerTextDrawSetString(playerid, Subtitle[playerid], inputtext);
-            format(Temp_Name_Value[playerid], MAX_STRING, inputtext);
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_AGE_TD]){
-        if(response){
-            static body[MAX_STRING];
-            if(!strlen(inputtext)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character age.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character age is empty.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                return 1;
-            }
-            if(!IsNumeric(inputtext)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character age.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character age is not numeric.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                return 1;
-            }
-            if(!IsInBetween(strval(inputtext), 18, 99)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character age.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character age must be greater than 17 and less than 99.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                return 1;
-            }
-            PlayerTextDrawSetString(playerid, Age_Value_TD[playerid], inputtext);
-            format(Temp_Age_Value[playerid], MAX_STRING, inputtext);
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_SEX_TD][1]){
-        if(response){
-            if(listitem == 0){
-                PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Male");
-                format(Temp_Sex_Value[playerid], MAX_STRING, "Male");
-            }
-            else if(listitem == 1){
-                PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Female");
-                format(Temp_Sex_Value[playerid], MAX_STRING, "Female");
-            }
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_NATIONALITY_TD][1]){
-        if(response){
-            for(new i; i < sizeof(nationalities); i++){
-                if(listitem == i){
-                    PlayerTextDrawSetString(playerid, Nationality_Value_TD[playerid], nationalities[i]);
-                    format(Temp_Nationality_Value[playerid], MAX_STRING, nationalities[i]);
-                }
-            }
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_PERSONALITY_TD][1]){
-        if(response){
-            if(listitem == 0){
-                PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Charismatic");
-                format(Temp_Personality_Value[playerid], MAX_STRING, "Charismatic");
-            }
-            else if(listitem == 1){
-                PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Extrovert");
-                format(Temp_Personality_Value[playerid], MAX_STRING, "Extrovert");
-            }
-            else if(listitem == 2){
-                PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Introvert");
-                format(Temp_Personality_Value[playerid], MAX_STRING, "Introvert");
-            }
-            else if(listitem == 3){
-                PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Intelligent");
-                format(Temp_Personality_Value[playerid], MAX_STRING, "Intelligent");
-            }
-            else if(listitem == 4){
-                PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Skillful");
-                format(Temp_Personality_Value[playerid], MAX_STRING, "Skillful");
-            }
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_RELIGION_TD]){
-        if(response){
-            static body[MAX_STRING];
-            if(!strlen(inputtext)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character religion.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character religion is empty, setting it to \"None\".", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Character Creation Error!", body, "Back", "");
-                return 1;
-            }
-            PlayerTextDrawSetString(playerid, Religion_Value_TD[playerid], inputtext);
-            format(Temp_Religion_Value[playerid], MAX_STRING, inputtext);
-        }
-        else{
-            PlayerTextDrawSetString(playerid, Religion_Value_TD[playerid], Temp_Religion_Value[playerid]);
-        }
     }
     return 1;
 }

@@ -540,31 +540,138 @@ hook OnPlayerConnect(playerid){
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
     if(playertextid == Password_Box[playerid]){
-        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_REGISTER_PASSWORD_TD], DIALOG_STYLE_PASSWORD, "Registration", "Enter your desired password", "Continue", "Back");
+        inline OnPlayerEnterPassword(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                new strength;
+                if(strlen(inputtext) < 5){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Password is too short", HidePassword(strlen(inputtext), "*"));
+                    return 1;
+                }
+                if(strlen(inputtext) > 16){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Password is too long", HidePassword(strlen(inputtext), "*"));
+                    return 1;
+                }
+                strength += strlen(inputtext);
+                if(HasNumeric(inputtext) && !IsNumeric(inputtext)){
+                    strength += 2;
+                }
+                if(HasCharacters(inputtext)){
+                    strength += 3;
+                }
+                if(strength > 15){
+                    PlayerTextDrawHide(playerid, Password_Strength[playerid]);
+                    PlayerTextDrawSetString(playerid, Password_Strength[playerid], "Very_Strong");
+                    PlayerTextDrawColor(playerid, Password_Strength[playerid], COLOR_DARKGREEN);
+                    PlayerTextDrawShow(playerid, Password_Strength[playerid]);
+                }
+                else if(strength > 10 && strength <= 15){
+                    PlayerTextDrawHide(playerid, Password_Strength[playerid]);
+                    PlayerTextDrawSetString(playerid, Password_Strength[playerid], "Strong");
+                    PlayerTextDrawColor(playerid, Password_Strength[playerid], COLOR_LIMEGREEN);
+                    PlayerTextDrawShow(playerid, Password_Strength[playerid]);
+                }
+                else{
+                    PlayerTextDrawHide(playerid, Password_Strength[playerid]);
+                    PlayerTextDrawSetString(playerid, Password_Strength[playerid], "Weak");
+                    PlayerTextDrawColor(playerid, Password_Strength[playerid], COLOR_RED);
+                    PlayerTextDrawShow(playerid, Password_Strength[playerid]);
+                }
+
+                if(!strcmp(inputtext, Temp_Confirm_Password_Value[playerid])){
+                    PlayerTextDrawHide(playerid, Password_Match[playerid]);
+                    PlayerTextDrawSetString(playerid, Password_Match[playerid], "Match");
+                    PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_LIMEGREEN);
+                    PlayerTextDrawShow(playerid, Password_Match[playerid]);
+                }
+                else{
+                    PlayerTextDrawHide(playerid, Password_Match[playerid]);
+                    PlayerTextDrawSetString(playerid, Password_Match[playerid], "Not_Match");
+                    PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_RED);
+                    PlayerTextDrawShow(playerid, Password_Match[playerid]);
+                }
+
+                PlayerTextDrawSetString(playerid, Password_Box[playerid], HidePassword(strlen(inputtext)));
+                format(Temp_Register_Password_Value[playerid], MAX_STRING, inputtext);
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerEnterPassword, DIALOG_STYLE_PASSWORD, "Registration", "Enter your desired password", "Continue", "Back");
     }
     else if(playertextid == Confirm_Password_Box[playerid]){
-        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_CONFIRM_PASSWORD_TD], DIALOG_STYLE_PASSWORD, "Registration", "Confirm password", "Continue", "Back");
+        inline OnPlayerEnterConfirmPassword(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                if(!strlen(inputtext)){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your password confirmation.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Input for password confirmation is empty.", inputtext);
+                    return 1;
+                }
+                if(!strcmp(Temp_Register_Password_Value[playerid], inputtext)){
+                    PlayerTextDrawHide(playerid, Password_Match[playerid]);
+                    PlayerTextDrawSetString(playerid, Password_Match[playerid], "Match");
+                    PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_LIMEGREEN);
+                    PlayerTextDrawShow(playerid, Password_Match[playerid]);
+                }
+                else{
+                    PlayerTextDrawHide(playerid, Password_Match[playerid]);
+                    PlayerTextDrawSetString(playerid, Password_Match[playerid], "Not_Match");
+                    PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_RED);
+                    PlayerTextDrawShow(playerid, Password_Match[playerid]);
+                }
+                PlayerTextDrawSetString(playerid, Confirm_Password_Box[playerid], HidePassword(strlen(inputtext)));
+                format(Temp_Confirm_Password_Value[playerid], MAX_STRING, inputtext);
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerEnterConfirmPassword, DIALOG_STYLE_PASSWORD, "Registration", "Confirm your password", "Continue", "Back");
     }
     else if(playertextid == Email_Box[playerid]){
-        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_EMAIL_TD], DIALOG_STYLE_INPUT, "Registration", "Enter your recovery email", "Continue", "Back");
+        inline OnPlayerEnterEmail(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                for(new i; i < strlen(inputtext); i++){
+                    if(inputtext[i] == '@'){
+                        if(i == 0){
+                            Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account email.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Emails don't start with @.", inputtext);
+                            return 1;
+                        }
+                        if(i == strlen(inputtext)-1){
+                            Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account email.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Emails don't end with @.", inputtext);
+                            return 1;
+                        }
+                    }
+                }
+                format(Temp_Email_Value[playerid], MAX_STRING, inputtext);
+                strreplace(Temp_Email_Value[playerid], "@", "(a)");
+                PlayerTextDrawSetString(playerid, Email_Box[playerid], Temp_Email_Value[playerid]);
+                strreplace(Temp_Email_Value[playerid], "(a)", "@");
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerEnterEmail, DIALOG_STYLE_PASSWORD, "Registration", "Enter your recovery email", "Continue", "Back");
     }
     else if(playertextid == Code_Box[playerid]){
-        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_CAPTCHA_TD], DIALOG_STYLE_INPUT, "Registration", "Enter captcha code", "Continue", "Back");
+        inline OnPlayerEnterCaptcha(response, listitem, string:inputtext[]){
+            #pragma unused listitem
+            if(response){
+                if(strlen(inputtext) != 10){
+                    Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for the captcha code.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Code does not meet the required length of characters.", inputtext);
+                    return 1;
+                }
+                PlayerTextDrawSetString(playerid, Code_Box[playerid], inputtext);
+                format(Temp_Captcha_Value[playerid][1], MAX_STRING, inputtext);
+            }
+        }
+        Dialog_ShowCallback(playerid, using inline OnPlayerEnterCaptcha, DIALOG_STYLE_PASSWORD, "Registration", "Enter captcha code", "Continue", "Back");
     }
     else if(playertextid == Back_Button_TD[playerid]){
         AccountRegistrationTD(playerid, false);
         CharacterCustomizationTD(playerid);
     }
     else if(playertextid == Register_Button_TD[playerid]){
-        static body[MAX_STRING];
         if(strcmp(Temp_Register_Password_Value[playerid], Temp_Confirm_Password_Value[playerid])){
-            format(body, MAX_STRING, ""COL_RED"[ERROR]: "COL_WHITE"There is an error with your password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Your password and password confirmations aren't matched.");
-            ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
+            Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_RED"[ERROR]: "COL_WHITE"There is an error with your password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Your password and password confirmations aren't matched.");
             return 1;
         }
         if(strcmp(Temp_Captcha_Value[playerid][0], Temp_Captcha_Value[playerid][1])){
-            format(body, MAX_STRING, ""COL_RED"[ERROR]: "COL_WHITE"There is an error with the captcha code.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"The code you entered is incorrect.");
-            ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
+            Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Account Registration Error!", "Back", "", ""COL_RED"[ERROR]: "COL_WHITE"There is an error with the captcha code.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"The code you entered is incorrect.");
             return 1;
         }
         SetPlayerSkin(playerid, Temp_Skin_Value[playerid]);
@@ -642,125 +749,4 @@ HidePassword(length, const character[] = "-"){
         strcat(new_pass, string);
     }
     return new_pass;
-}
-
-hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]){
-    if(dialogid == Dialog_ID[DIALOG_REGISTER_PASSWORD_TD]){
-        if(response){
-            static body[MAX_STRING];
-            static strength;
-            if(strlen(inputtext) < 5){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Password is too short", HidePassword(strlen(inputtext), "*"));
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
-                return 1;
-            }
-            if(strlen(inputtext) > 16){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account password.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Password is too long", HidePassword(strlen(inputtext), "*"));
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
-                return 1;
-            }
-            strength = 0;
-            strength += strlen(inputtext);
-            if(HasNumeric(inputtext) && !IsNumeric(inputtext)){
-                strength += 2;
-            }
-            if(HasCharacters(inputtext)){
-                strength += 3;
-            }
-            if(strength > 15){
-                PlayerTextDrawHide(playerid, Password_Strength[playerid]);
-                PlayerTextDrawSetString(playerid, Password_Strength[playerid], "Very_Strong");
-                PlayerTextDrawColor(playerid, Password_Strength[playerid], COLOR_DARKGREEN);
-                PlayerTextDrawShow(playerid, Password_Strength[playerid]);
-            }
-            else if(strength > 10 && strength <= 15){
-                PlayerTextDrawHide(playerid, Password_Strength[playerid]);
-                PlayerTextDrawSetString(playerid, Password_Strength[playerid], "Strong");
-                PlayerTextDrawColor(playerid, Password_Strength[playerid], COLOR_LIMEGREEN);
-                PlayerTextDrawShow(playerid, Password_Strength[playerid]);
-            }
-            else{
-                PlayerTextDrawHide(playerid, Password_Strength[playerid]);
-                PlayerTextDrawSetString(playerid, Password_Strength[playerid], "Weak");
-                PlayerTextDrawColor(playerid, Password_Strength[playerid], COLOR_RED);
-                PlayerTextDrawShow(playerid, Password_Strength[playerid]);
-            }
-
-            if(!strcmp(inputtext, Temp_Confirm_Password_Value[playerid])){
-                PlayerTextDrawHide(playerid, Password_Match[playerid]);
-                PlayerTextDrawSetString(playerid, Password_Match[playerid], "Match");
-                PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_LIMEGREEN);
-                PlayerTextDrawShow(playerid, Password_Match[playerid]);
-            }
-            else{
-                PlayerTextDrawHide(playerid, Password_Match[playerid]);
-                PlayerTextDrawSetString(playerid, Password_Match[playerid], "Not_Match");
-                PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_RED);
-                PlayerTextDrawShow(playerid, Password_Match[playerid]);
-            }
-
-            PlayerTextDrawSetString(playerid, Password_Box[playerid], HidePassword(strlen(inputtext)));
-            format(Temp_Register_Password_Value[playerid], MAX_STRING, inputtext);
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_CONFIRM_PASSWORD_TD]){
-        static body[MAX_STRING];
-        if(response){
-            if(!strlen(inputtext)){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your password confirmation.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Input for password confirmation is empty.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
-                return 1;
-            }
-            if(!strcmp(Temp_Register_Password_Value[playerid], inputtext)){
-                PlayerTextDrawHide(playerid, Password_Match[playerid]);
-                PlayerTextDrawSetString(playerid, Password_Match[playerid], "Match");
-                PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_LIMEGREEN);
-                PlayerTextDrawShow(playerid, Password_Match[playerid]);
-            }
-            else{
-                PlayerTextDrawHide(playerid, Password_Match[playerid]);
-                PlayerTextDrawSetString(playerid, Password_Match[playerid], "Not_Match");
-                PlayerTextDrawColor(playerid, Password_Match[playerid], COLOR_RED);
-                PlayerTextDrawShow(playerid, Password_Match[playerid]);
-            }
-            PlayerTextDrawSetString(playerid, Confirm_Password_Box[playerid], HidePassword(strlen(inputtext)));
-            format(Temp_Confirm_Password_Value[playerid], MAX_STRING, inputtext);
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_EMAIL_TD]){
-        if(response){
-            static body[MAX_STRING];
-            for(new i; i < strlen(inputtext); i++){
-                if(inputtext[i] == '@'){
-                    if(i == 0){
-                        format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account email.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Emails don't start with @.", inputtext);
-                        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
-                        return 1;
-                    }
-                    if(i == strlen(inputtext)-1){
-                        format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your account email.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Emails don't end with @.", inputtext);
-                        ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
-                        return 1;
-                    }
-                }
-            }
-            format(Temp_Email_Value[playerid], MAX_STRING, inputtext);
-            strreplace(Temp_Email_Value[playerid], "@", "(a)");
-            PlayerTextDrawSetString(playerid, Email_Box[playerid], Temp_Email_Value[playerid]);
-            strreplace(Temp_Email_Value[playerid], "(a)", "@");
-        }
-    }
-    else if(dialogid == Dialog_ID[DIALOG_CAPTCHA_TD]){
-        if(response){
-            static body[MAX_STRING];
-            if(strlen(inputtext) != 10){
-                format(body, MAX_STRING, ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for the captcha code.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Code does not meet the required length of characters.", inputtext);
-                ShowPlayerDialog(playerid, Dialog_ID[DIALOG_MISC], DIALOG_STYLE_MSGBOX, "Account Registration Error!", body, "Back", "");
-                return 1;
-            }
-            PlayerTextDrawSetString(playerid, Code_Box[playerid], inputtext);
-            format(Temp_Captcha_Value[playerid][1], MAX_STRING, inputtext);
-        }
-    }
-    return 1;
 }
