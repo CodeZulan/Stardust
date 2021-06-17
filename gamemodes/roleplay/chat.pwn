@@ -61,7 +61,7 @@ YCMD:ooc(playerid, params[], help){
 
     if(sscanf(params, "s[256]", message)){
         SendCustomMessage(playerid, MESSAGE_USAGE, "/ooc [message].");
-        SendCustomMessage(playerid, MESSAGE_SAMPLE, " (( %s says: Add me on discord. ))", GetPlayerNameEx(playerid, false));
+        SendCustomMessage(playerid, MESSAGE_SAMPLE, " "COL_CADETBLUE"(( %s says: Add me on discord. ))", GetPlayerNameEx(playerid, false));
         return 1;
     }
 
