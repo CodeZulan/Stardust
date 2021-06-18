@@ -50,7 +50,6 @@ new bool:ServerInitiated;
 #include "coding/extensions.pwn"
 #include "coding/nationalities.pwn"
 #include "coding/colors.pwn"
-#include "coding/dialogs.pwn"
 #include "coding/getter.pwn"
 #include "coding/checker.pwn"
 #include "coding/message.pwn"
