@@ -715,7 +715,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         inline OnPlayerChooseReligion(response, listitem, string:inputtext[]){
             #pragma unused listitem
             if(response){
-                if(!strlen(inputtext)){
+                if(isnull(inputtext)){
                     Dialog_ShowEx(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", "Back", "", ""COL_WHITE"    Your Input: "COL_LIME"%s\n\n"COL_RED"[ERROR]: "COL_WHITE"You have entered an invalid format for your character religion.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"Character religion is empty, setting it to \"None\".", inputtext);
                     return 1;
                 }
@@ -726,7 +726,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
                 PlayerTextDrawSetString(playerid, Religion_Value_TD[playerid], Temp_Religion_Value[playerid]);
             }
         }
-        Dialog_ShowCallback(playerid, using inline OnPlayerChooseReligion, DIALOG_STYLE_INPUT, "Character Creation", "Enter your character's Religion", "Enter", "Back");
+        Dialog_ShowCallback(playerid, using inline OnPlayerChooseReligion, DIALOG_STYLE_INPUT, "Character Creation", ""COL_LIMEGREEN"Enter your character's Religion\n\n"COL_ORANGE"[TIP]: "COL_WHITE"You can leave this blank and your religion will be marked as (None).\nThe character religion can also be changed In-Characterly.\n"COL_WHITE"Find out how on your journey.\n\n"COL_PURPLE"[EXAMPLE]: "COL_WHITE"Catholic", "Enter", "Back");
     }
     else if(playertextid == Character_Button_TD[playerid][0]){
         Character_Model[playerid]--;
@@ -761,19 +761,15 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
     else if(playertextid == Continue_Button_TD[playerid]){
         if(!strcmp(Temp_Age_Value[playerid], "Age")){
             Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's age yet.", "Back");
-            return 1;
         }
-        if(!strcmp(Temp_Sex_Value[playerid], "Sex")){
+        else if(!strcmp(Temp_Sex_Value[playerid], "Sex")){
             Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's sex yet.", "Back");
-            return 1;
         }
-        if(!strcmp(Temp_Nationality_Value[playerid], "Nationality")){
+        else if(!strcmp(Temp_Nationality_Value[playerid], "Nationality")){
             Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's nationality yet.", "Back");
-            return 1;
         }
-        if(!strcmp(Temp_Personality_Value[playerid], "Personality")){
+        else if(!strcmp(Temp_Personality_Value[playerid], "Personality")){
             Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's personality yet.", "Back");
-            return 1;
         }
 
         Temp_Skin_Value[playerid] = Character_Model[playerid];

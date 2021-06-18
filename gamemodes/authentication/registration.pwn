@@ -656,7 +656,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
                 format(Temp_Captcha_Value[playerid][1], MAX_STRING, inputtext);
             }
         }
-        Dialog_ShowCallback(playerid, using inline OnPlayerEnterCaptcha, DIALOG_STYLE_PASSWORD, "Registration", "Enter captcha code", "Continue", "Back");
+        Dialog_ShowCallback(playerid, using inline OnPlayerEnterCaptcha, DIALOG_STYLE_INPUT, "Registration", "Enter captcha code", "Continue", "Back");
     }
     else if(playertextid == Back_Button_TD[playerid]){
         AccountRegistrationTD(playerid, false);

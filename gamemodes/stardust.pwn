@@ -42,6 +42,16 @@
 // ------------------
 new bool:ServerInitiated;
 
+// -----------
+// [Callbacks]
+// -----------
+public OnGameModeInit(){
+    if(ServerInitiated){
+        print("Server initiating...");
+    }
+    return 1;
+}
+
 // ---------
 // [Modules]
 // ---------
@@ -71,16 +81,6 @@ new bool:ServerInitiated;
 // - {Roleplay Submodule}
 #include "roleplay/commands.pwn"
 #include "roleplay/chat.pwn"
-
-// -----------
-// [Callbacks]
-// -----------
-public OnGameModeInit(){
-    if(ServerInitiated){
-        print("Server initiating...");
-    }
-    return 1;
-}
 
 // ---------------
 // [Main Function]
