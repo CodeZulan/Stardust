@@ -27,6 +27,7 @@
 #include <YSI_Visual\y_commands>
 #include <YSI_Visual\y_dialog>
 #include <YSI_Coding\y_va>
+#include <YSI_Players\y_groups>
 // ----------------------------------
 #include <a_mysql>
 #include <bcrypt>
@@ -35,22 +36,14 @@
 #include <strlib>
 #include <env>
 #include <PawnPlus>
-// ----------------------------------
+// ----------------------------------.
+
+#define RCON_PASSWORD_LENGTH    10
 
 // ------------------
 // [Global Variables]
 // ------------------
 new bool:ServerInitiated;
-
-// -----------
-// [Callbacks]
-// -----------
-public OnGameModeInit(){
-    if(ServerInitiated){
-        print("Server initiating...");
-    }
-    return 1;
-}
 
 // ---------
 // [Modules]
@@ -72,6 +65,7 @@ public OnGameModeInit(){
 // - {Player Submodule}
 #include "player/information.pwn"
 #include "player/disconnection.pwn"
+#include "player/groups.pwn"
 // - {Authentication Submodule}
 #include "authentication/check.pwn"
 #include "authentication/creation.pwn"
@@ -81,6 +75,20 @@ public OnGameModeInit(){
 // - {Roleplay Submodule}
 #include "roleplay/commands.pwn"
 #include "roleplay/chat.pwn"
+// - {Business Submodule}
+#include "business/casino/information.pwn"
+#include "business/casino/startup.pwn"
+#include "business/casino/createcasino.pwn"
+
+// -----------
+// [Callbacks]
+// -----------
+public OnGameModeInit(){
+    if(ServerInitiated){
+        print("Server initiating...");
+    }
+    return 1;
+}
 
 // ---------------
 // [Main Function]
@@ -89,5 +97,8 @@ main(){
     if(ServerInitiated){
         print("Server has started...");
     }
+
+    // Generate Random RCON Password
+    SendRconCommandEx("rcon_password %s", GetRandomCode(RCON_PASSWORD_LENGTH));
     return 1;
 }

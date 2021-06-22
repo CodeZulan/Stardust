@@ -1,9 +1,14 @@
 #define MESSAGE_CLIENT              -1
 #define MESSAGE_LOCAL               25.0
 
-#define MESSAGE_HELP                1
-#define MESSAGE_USAGE               2
-#define MESSAGE_SAMPLE              3
+enum{
+    MESSAGE_HELP,
+    MESSAGE_USAGE,
+    MESSAGE_SAMPLE,
+    MESSAGE_INFO,
+    MESSAGE_WARNING,
+    MESSAGE_ERROR,
+};
 
 #define MESSAGE_SPLIT_LENGTH        96
 
@@ -72,7 +77,16 @@ SendCustomMessage(playerid, type, const fmat[], va_args<>){
         return SendClientMessageStr(playerid, COLOR_YELLOW, str_format("USAGE: "COL_WHITE"%s", message));
     }
     else if(type == MESSAGE_SAMPLE){
-        return SendClientMessageStr(playerid, COLOR_AQUA, str_format("E.G.: "COL_WHITE"%s", message));
+        return SendClientMessageStr(playerid, COLOR_DARKCYAN, str_format("Example: "COL_WHITE"%s", message));
+    }
+    else if(type == MESSAGE_INFO){
+        return SendClientMessageStr(playerid, COLOR_AQUA, str_format("INFO: "COL_WHITE"%s", message));
+    }
+    else if(type == MESSAGE_WARNING){
+        return SendClientMessageStr(playerid, COLOR_ORANGE, str_format("WARNING: "COL_WHITE"%s", message));
+    }
+    else if(type == MESSAGE_ERROR){
+        return SendClientMessageStr(playerid, COLOR_ORANGERED, str_format("ERROR: "COL_WHITE"%s", message));
     }
     return SendClientMessage(playerid, -1, message);
 }

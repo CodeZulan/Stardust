@@ -1,7 +1,20 @@
+#include <YSI_Coding\y_hooks>
+
+hook OnGameModeInit(){
+    Group_SetCommand(Group_LoggedIn, YCMD:i, ALLOW);
+    return 1;
+}
+
+hook OnPlayerConnect(playerid){
+    Group_SetPlayer(Group_LoggedIn, playerid, true);
+    return 1;
+}
+
 YCMD:me(playerid, params[], help) = i;
 
 YCMD:i(playerid, params[], help){
-    static action[MAX_STRING];
+    static
+        action[MAX_STRING];
 
     if(help){
         SendCustomMessage(playerid, MESSAGE_HELP, "/i shows the action of your character in a roleplay manner.");
@@ -19,7 +32,8 @@ YCMD:i(playerid, params[], help){
 }
 
 YCMD:do(playerid, params[], help){
-    static description[MAX_STRING];
+    static
+        description[MAX_STRING];
 
     if(help){
         SendCustomMessage(playerid, MESSAGE_HELP, "/do supports your roleplay by describing your roleplay or surrounding using adjectives or adverbs.");
@@ -37,7 +51,8 @@ YCMD:do(playerid, params[], help){
 }
 
 YCMD:attempt(playerid, params[], help){
-    static action[MAX_STRING];
+    static
+        action[MAX_STRING];
 
     if(help){
         SendCustomMessage(playerid, MESSAGE_HELP, "/attempt is almost same as /i but in this case you try to attempt an action which will result to a 50-50 chance of success or fail.");

@@ -21,3 +21,10 @@ PlayerText:CreatePlayerTextDrawEx(playerid, Float:x, Float:y, const fmat[], va_a
 
     return CreatePlayerTextDraw(playerid, x, y, string);
 }
+
+SendRconCommandEx(const fmat[], va_args<>){
+    static command[MAX_STRING];
+    va_format(command, MAX_STRING, fmat, va_start<1>);
+
+    return SendRconCommand(command);
+}
