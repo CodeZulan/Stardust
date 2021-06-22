@@ -16,6 +16,11 @@ new
     Character_World[MAX_PLAYERS],
     Character_Skin[MAX_PLAYERS];
 
+hook OnGameModeInit(){
+    Log(LOG_MODULE, "[player/] Player information loaded...");
+    return 1;
+}
+
 hook OnPlayerConnect(playerid){
     format(Character_Name[playerid], MAX_PLAYER_NAME+1, "%s", GetPlayerNameEx(playerid));
     Character_Age[playerid] = 18;

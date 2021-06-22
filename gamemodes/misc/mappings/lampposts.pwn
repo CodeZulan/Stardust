@@ -939,5 +939,7 @@ hook OnPlayerConnect(playerid){
     RemoveBuildingForPlayer(playerid, 1294, 1692.229, 1717.489, 14.273, 0.250);
     RemoveBuildingForPlayer(playerid, 1294, 1733.449, 1356.359, 14.273, 0.250);
     RemoveBuildingForPlayer(playerid, 1294, 1733.310, 1629.300, 12.562, 0.250);
+
+    Log(LOG_MODULE, "[misc/mappings] Lampposts Removal loaded...");
     return 1;
 }

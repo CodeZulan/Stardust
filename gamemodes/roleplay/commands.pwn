@@ -2,6 +2,8 @@
 
 hook OnGameModeInit(){
     Group_SetCommand(Group_LoggedIn, YCMD:i, ALLOW);
+
+    Log(LOG_MODULE, "[roleplay/] Roleplay commands loaded...");
     return 1;
 }
 

@@ -24,6 +24,11 @@ new
     Temp_Fetched_IP[MAX_PLAYERS][MAX_STRING],
     Temp_Attempts[MAX_PLAYERS];
 
+hook OnGameModeInit(){
+    Log(LOG_MODULE, "[authentication/] Account login loaded...");
+    return 1;
+}
+
 hook OnPlayerConnect(playerid){
     Temp_Attempts[playerid] = 3;
 

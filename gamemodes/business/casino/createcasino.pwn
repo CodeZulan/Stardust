@@ -2,6 +2,8 @@
 
 hook OnGameModeInit(){
     Group_SetCommand(Group_Management, YCMD:createcasino, ALLOW);
+
+    Log(LOG_MODULE, "[business/casino] Casino creation loaded...");
     return 1;
 }
 
@@ -48,7 +50,6 @@ YCMD:createcasino(playerid, params[], help){
 
         Casino_Entrance[casinoid] = CreateDynamicPickup(PICKUP_TIKI, 1, GetPlayerPosition(playerid, POS_X), GetPlayerPosition(playerid, POS_Y), GetPlayerPosition(playerid, POS_Z), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), -1, 10.0);
         mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "INSERT INTO casino_entrance(casino_id, casino_entrance_pos_x, casino_entrance_pos_y, casino_entrance_pos_z, casino_entrance_interior, casino_entrance_world) VALUES(%d, %f, %f, %f, %d, %d)", Casino_ID[casinoid], GetPlayerPosition(playerid, POS_X), GetPlayerPosition(playerid, POS_Y), GetPlayerPosition(playerid, POS_Z), GetPlayerInterior(playerid), GetPlayerVirtualWorld(playerid));
-        printf("%s", SQL_Buffer);
         mysql_tquery(SQL_Handle, SQL_Buffer);
     }
     else{
@@ -71,6 +72,4 @@ YCMD:createcasino(playerid, params[], help){
 forward OnCasinoCreate(casinoid);
 public OnCasinoCreate(casinoid){
     Casino_ID[casinoid] = cache_insert_id();
-    printf("Passed_Casino_ID: %d", casinoid);
-    printf("Casino_ID: %d", Casino_ID[casinoid]);
 }

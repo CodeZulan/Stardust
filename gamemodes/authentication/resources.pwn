@@ -35,6 +35,11 @@ DownloadScreenTD(playerid, toggle=true){
     }
 }
 
+hook OnGameModeInit(){
+    Log(LOG_MODULE, "[authentication/] Account resources loaded...");
+    return 1;
+}
+
 hook OnPlayerConnect(playerid){
     IsPlayerDownloading[playerid] = PLAYER_ALREADY_DOWNLOADED;
 

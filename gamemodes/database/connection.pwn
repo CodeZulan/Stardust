@@ -26,12 +26,12 @@ hook OnGameModeInit(){
         printf("[MySQL] ERROR DETAILS: %s", SQL_Error);
         print("[MySQL] WARNING: The server will now shutdown...");
         SendRconCommand("exit");
-
-        ServerInitiated = false;
     }
     else{
         print("[MySQL] INFO: Database connection has been established.");
     }
+
+    Log(LOG_MODULE, "[database/] MYSQL Connection loaded...");
     return 1;
 }
 

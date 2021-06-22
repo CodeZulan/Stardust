@@ -5,6 +5,11 @@ new
     PlayerText:Server_Name_TD[MAX_PLAYERS][2],
     PlayerText:Checking_Message_TD[MAX_PLAYERS];
 
+hook OnGameModeInit(){
+    Log(LOG_MODULE, "[authentication/] Account check loaded...");
+    return 1;
+}
+
 hook OnPlayerConnect(playerid){
     Background_TD[playerid] = CreatePlayerTextDraw(playerid, 320.000000, 1.000000, "_");
     PlayerTextDrawFont(playerid, Background_TD[playerid], 1);

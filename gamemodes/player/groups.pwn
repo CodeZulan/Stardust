@@ -9,5 +9,7 @@ hook OnGameModeInit(){
     Group_Management = Group_Create();
 
     Group_SetGlobalCommandDefault(ALLOW);
+
+    Log(LOG_MODULE, "[player/] Player groups loaded...");
     return 1;
 }

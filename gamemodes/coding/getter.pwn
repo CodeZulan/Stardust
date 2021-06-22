@@ -47,3 +47,30 @@ GetPlayerIPAddress(playerid){
     GetPlayerIp(playerid, ip);
     return ip;
 }
+
+GetDateFormatted(){
+    new
+        Year,
+        Month,
+        Day;
+    
+    new
+        Date[16];
+
+    getdate(Year, Month, Day);
+    format(Date, 16, "%02d/%02d/%02d", Day, Month, Year);
+    return Date;
+}
+
+GetTimeFormatted(){
+    new
+        Hours,
+        Minutes;
+    
+    new
+        Time[16];
+
+    gettime(Hours, Minutes);
+    format(Time, 16, "%02d:%02d", Hours, Minutes);
+    return Time;
+}

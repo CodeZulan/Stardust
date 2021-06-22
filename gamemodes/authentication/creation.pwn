@@ -123,6 +123,11 @@ CharacterCustomizationTD(playerid, toggle=true){
     }
 }
 
+hook OnGameModeInit(){
+    Log(LOG_MODULE, "[authentication/] Account creation loaded...");
+    return 1;
+}
+
 hook OnPlayerConnect(playerid){
     Title_Background_Box_TD[playerid] = CreatePlayerTextDraw(playerid, 320.000000, -1.000000, "_");
     PlayerTextDrawFont(playerid, Title_Background_Box_TD[playerid], 1);

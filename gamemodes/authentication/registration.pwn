@@ -33,6 +33,11 @@ new
 
 static Cutscene_Plane[MAX_PLAYERS];
 
+hook OnGameModeInit(){
+    Log(LOG_MODULE, "[authentication/] Account registration loaded...");
+    return 1;
+}
+
 hook OnPlayerConnect(playerid){
     format(Temp_Captcha_Value[playerid][0], MAX_STRING, GetRandomCode(10));
 

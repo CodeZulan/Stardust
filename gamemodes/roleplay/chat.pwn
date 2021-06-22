@@ -1,5 +1,10 @@
 #include <YSI_Coding\y_hooks>
 
+hook OnGameModeInit(){
+    Log(LOG_MODULE, "[roleplay/] Roleplay chat loaded...");
+    return 1;
+}
+
 hook OnPlayerText(playerid, text[]){
     static message[MAX_STRING];
     format(message, MAX_STRING, " %s says: %s", GetPlayerNameEx(playerid, false), text);

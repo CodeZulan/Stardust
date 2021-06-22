@@ -36,14 +36,9 @@
 #include <strlib>
 #include <env>
 #include <PawnPlus>
-// ----------------------------------.
+// ----------------------------------
 
 #define RCON_PASSWORD_LENGTH    10
-
-// ------------------
-// [Global Variables]
-// ------------------
-new bool:ServerInitiated;
 
 // ---------
 // [Modules]
@@ -56,6 +51,7 @@ new bool:ServerInitiated;
 #include "coding/getter.pwn"
 #include "coding/checker.pwn"
 #include "coding/message.pwn"
+#include "coding/log.pwn"
 // - {Misc Submodule}
 #include "misc/mappings/lampposts.pwn"
 #include "misc/mappings/airport.pwn"
@@ -79,14 +75,23 @@ new bool:ServerInitiated;
 #include "business/casino/information.pwn"
 #include "business/casino/startup.pwn"
 #include "business/casino/createcasino.pwn"
+#include "business/casino/entrance.pwn"
 
 // -----------
 // [Callbacks]
 // -----------
 public OnGameModeInit(){
-    if(ServerInitiated){
-        print("Server initiating...");
-    }
+    AllowInteriorWeapons(true);
+    DisableInteriorEnterExits();
+    EnableZoneNames(true);
+    return 1;
+}
+
+public OnPlayerConnect(playerid){
+    SetPlayerShopName(playerid, "");
+    EnableStuntBonusForPlayer(playerid, false);
+    EnablePlayerCameraTarget(playerid, true);
+    EnableTirePopping(true);
     return 1;
 }
 
@@ -94,10 +99,6 @@ public OnGameModeInit(){
 // [Main Function]
 // ---------------
 main(){
-    if(ServerInitiated){
-        print("Server has started...");
-    }
-
     // Generate Random RCON Password
     SendRconCommandEx("rcon_password %s", GetRandomCode(RCON_PASSWORD_LENGTH));
     return 1;

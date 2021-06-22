@@ -3,6 +3,8 @@
 hook OnGameModeInit(){
     mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "SELECT * FROM casinos");
     mysql_tquery(SQL_Handle, SQL_Buffer, "OnCasinoLoad");
+
+    Log(LOG_MODULE, "[business/casino] Casino startup loaded...");
     return 1;
 }
 
@@ -32,17 +34,19 @@ public OnCasinoEntranceLoad(casinoid){
 
         Iter_Alloc(CasinoEntrances);
 
-        cache_get_value_name_float(i, "casino_entrance_pos_x", Casino_Entrance_Position[casinoid][casinoentranceid][0]);
-        cache_get_value_name_float(i, "casino_entrance_pos_y", Casino_Entrance_Position[casinoid][casinoentranceid][1]);
-        cache_get_value_name_float(i, "casino_entrance_pos_z", Casino_Entrance_Position[casinoid][casinoentranceid][2]);
-        cache_get_value_name_int(i, "casino_entrance_interior", Casino_Entrance_Interior[casinoid][casinoentranceid]);
-        cache_get_value_name_int(i, "casino_entrance_world", Casino_Entrance_World[casinoid][casinoentranceid]);
-        cache_get_value_name_float(i, "casino_exit_pos_x", Casino_Exit_Position[casinoid][casinoentranceid][0]);
-        cache_get_value_name_float(i, "casino_exit_pos_y", Casino_Exit_Position[casinoid][casinoentranceid][1]);
-        cache_get_value_name_float(i, "casino_exit_pos_z", Casino_Exit_Position[casinoid][casinoentranceid][2]);
-        cache_get_value_name_int(i, "casino_exit_interior", Casino_Exit_Interior[casinoid][casinoentranceid]);
-        cache_get_value_name_int(i, "casino_exit_world", Casino_Exit_World[casinoid][casinoentranceid]);
+        cache_get_value_name_float(i, "casino_entrance_pos_x", Casino_Entrance_Position[casinoentranceid][0]);
+        cache_get_value_name_float(i, "casino_entrance_pos_y", Casino_Entrance_Position[casinoentranceid][1]);
+        cache_get_value_name_float(i, "casino_entrance_pos_z", Casino_Entrance_Position[casinoentranceid][2]);
+        cache_get_value_name_int(i, "casino_entrance_interior", Casino_Entrance_Interior[casinoentranceid]);
+        cache_get_value_name_int(i, "casino_entrance_world", Casino_Entrance_World[casinoentranceid]);
+        cache_get_value_name_float(i, "casino_exit_pos_x", Casino_Exit_Position[casinoentranceid][0]);
+        cache_get_value_name_float(i, "casino_exit_pos_y", Casino_Exit_Position[casinoentranceid][1]);
+        cache_get_value_name_float(i, "casino_exit_pos_z", Casino_Exit_Position[casinoentranceid][2]);
+        cache_get_value_name_int(i, "casino_exit_interior", Casino_Exit_Interior[casinoentranceid]);
+        cache_get_value_name_int(i, "casino_exit_world", Casino_Exit_World[casinoentranceid]);
 
-        Casino_Entrance[casinoid] = CreateDynamicPickup(PICKUP_TIKI, 1, Casino_Entrance_Position[casinoid][casinoentranceid][0], Casino_Entrance_Position[casinoid][casinoentranceid][1], Casino_Entrance_Position[casinoid][casinoentranceid][2], Casino_Entrance_World[casinoid][casinoentranceid], Casino_Entrance_Interior[casinoid][casinoentranceid], -1, 10.0);
+        Casino_Entrance_Casino[casinoentranceid] = casinoid;
+
+        Casino_Entrance[casinoid] = CreateDynamicPickup(PICKUP_TIKI, 1, Casino_Entrance_Position[casinoentranceid][0], Casino_Entrance_Position[casinoentranceid][1], Casino_Entrance_Position[casinoentranceid][2], Casino_Entrance_World[casinoentranceid], Casino_Entrance_Interior[casinoentranceid], -1, 10.0);
     }
 }
