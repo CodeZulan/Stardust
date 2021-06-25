@@ -83,7 +83,6 @@
 public OnGameModeInit(){
     AllowInteriorWeapons(true);
     DisableInteriorEnterExits();
-    EnableZoneNames(true);
     return 1;
 }
 
@@ -91,7 +90,6 @@ public OnPlayerConnect(playerid){
     SetPlayerShopName(playerid, "");
     EnableStuntBonusForPlayer(playerid, false);
     EnablePlayerCameraTarget(playerid, true);
-    EnableTirePopping(true);
     return 1;
 }
 

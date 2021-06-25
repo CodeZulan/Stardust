@@ -37,6 +37,19 @@ hook OnPlayerConnect(playerid){
 
     SetPVarInt(playerid, "IsPlayerLoggedIn", 0);
     SetPVarInt(playerid, "IsPlayerLoggingIn", 0);
+
+    Log(LOG_PLAYER_CONNECTION, "[Player Connection]: [%d] %s has connected to the server.", playerid, GetPlayerNameEx(playerid));
+    return 1;
+}
+
+hook OnPlayerDisconnect(playerid, reason){
+    new DisconnectReason[] = {
+        "Crashed",
+        "Quit",
+        "Kick/Ban"
+    };
+
+    Log(LOG_PLAYER_CONNECTION, "[Player Connection]: [%d] %s has disconnected from the server (%s).", playerid, GetPlayerNameEx(playerid), DisconnectReason[reason]);
     return 1;
 }
 

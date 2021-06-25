@@ -708,6 +708,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         WelcomeScreenTD(playerid);
 
         SetTimerEx("HideWelcomeScreen", 20000, false, "i", playerid);
+
+        Log(LOG_PLAYER_CONNECTION, "[Player Connection] [%d] %s has registered their account in to the server");
     }
     return 1;
 }

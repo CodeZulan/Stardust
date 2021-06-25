@@ -439,4 +439,6 @@ public OnPlayerLoggedIn(playerid){
     TogglePlayerControllable(playerid, true);
 
     SetPVarInt(playerid, "IsPlayerLoggedIn", 1);
+
+    Log(LOG_PLAYER_CONNECTION, "[Player Connection] [%d] %s has logged-in their account to the server");
 }

@@ -30,6 +30,8 @@ YCMD:i(playerid, params[], help){
     }
     
     SendClientMessageEx(playerid, COLOR_PLUM, MESSAGE_LOCAL, "  "COL_ORANGE"** "COL_PLUM"%s %s "COL_ORANGE"**", GetPlayerNameEx(playerid, false), action);
+    
+    Log(LOG_PLAYER_COMMAND, "[Player Command]: [%d] %s (/i %s)", playerid, GetPlayerNameEx(playerid), action);
     return 1;
 }
 
@@ -49,6 +51,8 @@ YCMD:do(playerid, params[], help){
     }
     
     SendClientMessageEx(playerid, COLOR_PLUM, MESSAGE_LOCAL, "  "COL_ORANGE"** "COL_PLUM"%s (( %s )) "COL_ORANGE"**", description, GetPlayerNameEx(playerid, false));
+
+    Log(LOG_PLAYER_COMMAND, "[Player Command]: [%d] %s (/do %s)", playerid, GetPlayerNameEx(playerid), description);
     return 1;
 }
 
@@ -68,5 +72,7 @@ YCMD:attempt(playerid, params[], help){
     }
     
     SendClientMessageEx(playerid, COLOR_PLUM, MESSAGE_LOCAL, "  "COL_ORANGE"** "COL_PLUM"%s %s %s."COL_ORANGE"**", GetPlayerNameEx(playerid, false), action, random(2) ? "and "COL_LIME"succeeded" : "but "COL_ORANGERED"failed");
+
+    Log(LOG_PLAYER_COMMAND, "[Player Command]: [%d] %s (/attempt %s)", playerid, GetPlayerNameEx(playerid), action);
     return 1;
 }

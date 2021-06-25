@@ -9,6 +9,8 @@ hook OnPlayerText(playerid, text[]){
     static message[MAX_STRING];
     format(message, MAX_STRING, " %s says: %s", GetPlayerNameEx(playerid, false), text);
     SendFadingMessage(playerid, message);
+
+    Log(LOG_PLAYER_CHAT, "[Player Chat]: [%d] %s: %s", playerid, GetPlayerNameEx(playerid), text);
     return 0;
 }
 
@@ -30,6 +32,8 @@ YCMD:low(playerid, params[], help){
 
     format(fstring, MAX_STRING, " %s says (low): %s", GetPlayerNameEx(playerid, false), message);
     SendFadingMessage(playerid, fstring, MESSAGE_LOCAL/2);
+
+    Log(LOG_PLAYER_CHAT, "[Player Chat]: [%d] %s (/low): %s", playerid, GetPlayerNameEx(playerid), message);
     return 1;
 }
 
@@ -51,6 +55,8 @@ YCMD:shout(playerid, params[], help){
 
     format(fstring, MAX_STRING, " %s says (low): %s", GetPlayerNameEx(playerid, false), message);
     SendFadingMessage(playerid, fstring, MESSAGE_LOCAL*1.5);
+
+    Log(LOG_PLAYER_CHAT, "[Player Chat]: [%d] %s (/shout): %s", playerid, GetPlayerNameEx(playerid), message);
     return 1;
 }
 
@@ -71,5 +77,7 @@ YCMD:ooc(playerid, params[], help){
     }
 
     SendClientMessageEx(playerid, COLOR_CADETBLUE, MESSAGE_LOCAL, " (( %s says: %s ))", GetPlayerNameEx(playerid, false), message);
+
+    Log(LOG_PLAYER_CHAT, "[Player Chat]: [%d] %s (/OOC): %s", playerid, GetPlayerNameEx(playerid), message);
     return 1;
 }
