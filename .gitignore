@@ -7,12 +7,8 @@
 *.lst
 *.asm
 
-# Vendor directory for dependencies
-dependencies/
-
 # Dependency versions lockfile
 pawn.lock
-
 
 #
 # Server/gamemode related files
@@ -24,15 +20,9 @@ pawn.lock
 # you can use the environment variable `SAMP_RCON_PASSWORD` to do this.
 server.cfg
 
-# Plugins directory
-plugins/
-
 # NTD directory
 NTD/
 Texture Studio Server/
-
-# ENV Info
-pawn-env.txt
 
 # binaries
 *.exe

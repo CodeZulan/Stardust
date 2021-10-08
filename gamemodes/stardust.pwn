@@ -19,6 +19,7 @@
 // ----------------------------------
 // - {YSI Includes}
 // -- {Startup Settings}
+#define CGEN_MEMORY (20000)
 #define YSI_NO_OPTIMISATION_MESSAGE
 #define YSI_NO_CACHE_MESSAGE
 #define YSI_NO_VERSION_CHECK
