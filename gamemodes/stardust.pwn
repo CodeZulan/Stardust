@@ -100,5 +100,6 @@ public OnPlayerConnect(playerid){
 main(){
     // Generate Random RCON Password
     SendRconCommandEx("rcon_password %s", GetRandomCode(RCON_PASSWORD_LENGTH));
+
     return 1;
 }

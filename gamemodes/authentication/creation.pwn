@@ -644,20 +644,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         inline OnPlayerChooseSex(response, listitem, string:inputtext[]){
             #pragma unused inputtext, listitem
             if(response){
-                inline OnPlayerSelectSex(response2, listitem2, string:inputtext2[]){
-                    #pragma unused inputtext2
-                    if(response2){
-                        if(listitem2 == 0){
-                            PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Male");
-                            format(Temp_Sex_Value[playerid], MAX_STRING, "Male");
-                        }
-                        else if(listitem2 == 1){
-                            PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Female");
-                            format(Temp_Sex_Value[playerid], MAX_STRING, "Female");
-                        }
-                    }
-                }
-                Dialog_ShowCallback(playerid, using inline OnPlayerSelectSex, DIALOG_STYLE_LIST, "Character Creation", "Male\nFemale", "Enter", "Back");
+                Dialog_ShowCallback(playerid, using public OnPlayerSelectSex<iiiis>, DIALOG_STYLE_LIST, "Character Creation", "Male\nFemale", "Enter", "Back");
             }
         }
         Dialog_ShowCallback(playerid, using inline OnPlayerChooseSex, DIALOG_STYLE_MSGBOX, "Character Creation", ""COL_LIMEGREEN"Choose your character's Sex\n\n"COL_ORANGE"[WARNING]: "COL_WHITE"Choosing your character's sex cannot be changed later,\nyou can only choose for your character's sex now.", "Enter", "Back");
@@ -666,18 +653,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         inline OnPlayerChooseNationality(response, listitem, string:inputtext[]){
             #pragma unused inputtext, listitem
             if(response){
-                inline OnPlayerSelectNationality(response2, listitem2, string:inputtext2[]){
-                    #pragma unused inputtext2
-                    if(response2){
-                        for(new i; i < sizeof(nationalities); i++){
-                            if(listitem2 == i){
-                                PlayerTextDrawSetString(playerid, Nationality_Value_TD[playerid], nationalities[i]);
-                                format(Temp_Nationality_Value[playerid], MAX_STRING, nationalities[i]);
-                            }
-                        }
-                    }
-                }
-                Dialog_ShowCallback(playerid, using inline OnPlayerSelectNationality, DIALOG_STYLE_LIST, "Character Creation", nationality_list(), "Enter", "Back");
+                Dialog_ShowCallback(playerid, using public OnPlayerSelectNationality<iiiis>, DIALOG_STYLE_LIST, "Character Creation", nationality_list(), "Enter", "Back");
             }
         }
         Dialog_ShowCallback(playerid, using inline OnPlayerChooseNationality, DIALOG_STYLE_MSGBOX, "Character Creation", ""COL_LIMEGREEN"Choose your character's Nationality\n\n"COL_ORANGE"[TIP]: "COL_WHITE"The character's nationality can also be changed at the LVDFA or \nLas Venturas Department of Foreign Affairs find out the location ICly.", "Enter", "Back");
@@ -686,32 +662,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         inline OnPlayerChoosePersonality(response, listitem, string:inputtext[]){
             #pragma unused inputtext, listitem
             if(response){
-                inline OnPlayerSelectPersonality(response2, listitem2, string:inputtext2[]){
-                    #pragma unused inputtext2
-                    if(response2){
-                        if(listitem2 == 0){
-                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Charismatic");
-                            format(Temp_Personality_Value[playerid], MAX_STRING, "Charismatic");
-                        }
-                        else if(listitem2 == 1){
-                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Extrovert");
-                            format(Temp_Personality_Value[playerid], MAX_STRING, "Extrovert");
-                        }
-                        else if(listitem2 == 2){
-                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Introvert");
-                            format(Temp_Personality_Value[playerid], MAX_STRING, "Introvert");
-                        }
-                        else if(listitem2 == 3){
-                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Intelligent");
-                            format(Temp_Personality_Value[playerid], MAX_STRING, "Intelligent");
-                        }
-                        else if(listitem2 == 4){
-                            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Skillful");
-                            format(Temp_Personality_Value[playerid], MAX_STRING, "Skillful");
-                        }
-                    }
-                }
-                Dialog_ShowCallback(playerid, using inline OnPlayerSelectPersonality, DIALOG_STYLE_LIST, "Character Creation", personalities, "Enter", "Back");
+                Dialog_ShowCallback(playerid, using public OnPlayerSelectPersonality<iiiis>, DIALOG_STYLE_LIST, "Character Creation", personalities, "Enter", "Back");
             }
         }
         Dialog_ShowCallback(playerid, using inline OnPlayerChoosePersonality, DIALOG_STYLE_MSGBOX, "Character Creation", ""COL_LIMEGREEN"Choose your character's Personality\n\n"COL_ORANGE"[TIP]: "COL_WHITE"The character's personality can also be later using /settings.", "Enter", "Back");
@@ -776,14 +727,67 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         else if(!strcmp(Temp_Personality_Value[playerid], "Personality")){
             Dialog_Show(playerid, DIALOG_STYLE_MSGBOX, "Character Creation Error!", ""COL_RED"[ERROR]: "COL_WHITE"There is an empty field.\n\n"COL_AQUA"[DETAILS]: "COL_WHITE"You haven't chosen your character's personality yet.", "Back");
         }
-
-        Temp_Skin_Value[playerid] = Character_Model[playerid];
+        else{
+            Temp_Skin_Value[playerid] = Character_Model[playerid];
         
-        PlayerTextDrawSetPreviewModel(playerid, Character_Preview_TD2[playerid], Temp_Skin_Value[playerid]);
-        CharacterCustomizationTD(playerid, false);
-        AccountRegistrationTD(playerid);
+            PlayerTextDrawSetPreviewModel(playerid, Character_Preview_TD2[playerid], Temp_Skin_Value[playerid]);
+            CharacterCustomizationTD(playerid, false);
+            AccountRegistrationTD(playerid);
+        }
     }
     return 1;
+}
+
+forward OnPlayerSelectSex(playerid, dialogid, response, listitem, string:inputtext[]);
+public OnPlayerSelectSex(playerid, dialogid, response, listitem, string:inputtext[]){
+    if(response){
+        if(listitem == 0){
+            PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Male");
+            format(Temp_Sex_Value[playerid], MAX_STRING, "Male");
+        }
+        else if(listitem == 1){
+            PlayerTextDrawSetString(playerid, Sex_Value_TD[playerid], "Female");
+            format(Temp_Sex_Value[playerid], MAX_STRING, "Female");
+        }
+    }
+}
+
+forward OnPlayerSelectNationality(playerid, dialogid, response, listitem, string:inputtext[]);
+public OnPlayerSelectNationality(playerid, dialogid, response, listitem, string:inputtext[]){
+    if(response){
+        for(new i; i < sizeof(nationalities); i++){
+            if(listitem == i){
+                PlayerTextDrawSetString(playerid, Nationality_Value_TD[playerid], nationalities[i]);
+                format(Temp_Nationality_Value[playerid], MAX_STRING, nationalities[i]);
+            }
+        }
+    }
+}
+
+forward OnPlayerSelectPersonality(playerid, dialogid, response, listitem, string:inputtext[]);
+public OnPlayerSelectPersonality(playerid, dialogid, response, listitem, string:inputtext[]){
+    if(response){
+        if(listitem == 0){
+            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Charismatic");
+            format(Temp_Personality_Value[playerid], MAX_STRING, "Charismatic");
+        }
+        else if(listitem == 1){
+            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Extrovert");
+            format(Temp_Personality_Value[playerid], MAX_STRING, "Extrovert");
+        }
+        else if(listitem == 2){
+            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Introvert");
+            format(Temp_Personality_Value[playerid], MAX_STRING, "Introvert");
+        }
+        else if(listitem == 3){
+            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Intelligent");
+            format(Temp_Personality_Value[playerid], MAX_STRING, "Intelligent");
+        }
+        else if(listitem == 4){
+            PlayerTextDrawSetString(playerid, Personality_Value_TD[playerid], "Skillful");
+            format(Temp_Personality_Value[playerid], MAX_STRING, "Skillful");
+        }
+    }
 }
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid){

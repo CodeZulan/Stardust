@@ -720,14 +720,14 @@ public OnPasswordHashed(playerid){
     bcrypt_get_hash(Hashed_Password);
     mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "INSERT INTO users(u_name, u_ip, u_password, u_email) VALUES('%e', '%e', '%e', '%e')", GetPlayerNameEx(playerid), GetPlayerIPAddress(playerid), Hashed_Password, Temp_Email_Value[playerid]);
     mysql_tquery(SQL_Handle, SQL_Buffer, "OnPlayerRegister", "i", playerid);
-    mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "INSERT INTO char_info(char_pos_x, char_pos_y, char_pos_z, char_pos_a) VALUES(%f, %f, %f, %f)", Character_Position[playerid][0], Character_Position[playerid][1], Character_Position[playerid][2], Character_Position[playerid][3]);
-    mysql_tquery(SQL_Handle, SQL_Buffer);
     return 1;
 }
 
 forward OnPlayerRegister(playerid);
 public OnPlayerRegister(playerid){
     User_ID[playerid] = cache_insert_id();
+    mysql_format(SQL_Handle, SQL_Buffer, MAX_STRING, "INSERT INTO char_info(u_id, char_pos_x, char_pos_y, char_pos_z, char_pos_a) VALUES(%d, %f, %f, %f, %f)", User_ID[playerid], Character_Position[playerid][0], Character_Position[playerid][1], Character_Position[playerid][2], Character_Position[playerid][3]);
+    mysql_tquery(SQL_Handle, SQL_Buffer);
 }
 
 forward HideWelcomeScreen(playerid);
