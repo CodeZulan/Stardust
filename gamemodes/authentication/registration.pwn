@@ -679,6 +679,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid){
         Cutscene_Plane[playerid] = CreateDynamicObject(1683, 1478.992187, 1718.191162, 15.747529, 0.000000, 0.000000, -91.699966, -1, -1, playerid, 500.00, 500.00);
 
         SetPlayerSkin(playerid, Temp_Skin_Value[playerid]);
+        Character_Skin[playerid] = Temp_Skin_Value[playerid];
 
         SpawnPlayer(playerid);
         SetPlayerPos(playerid, Character_Position[playerid][0], Character_Position[playerid][1], Character_Position[playerid][2]);
