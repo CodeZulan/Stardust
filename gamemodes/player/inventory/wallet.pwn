@@ -1,6 +1,11 @@
 #include <YSI_Coding\y_hooks>
 
 new
+    Character_Cash[MAX_PLAYERS],
+    bool:Character_ID[MAX_PLAYERS],
+    bool:Character_Drivers_License[MAX_PLAYERS];
+
+new
     PlayerText:ID_Background[MAX_PLAYERS],
     PlayerText:ID_Title_Background[MAX_PLAYERS],
     PlayerText:ID_Title[MAX_PLAYERS],
@@ -350,6 +355,12 @@ NationalIDTD(playerid, toggle=true){
         PlayerTextDrawHide(playerid, ID_Security_Icon[playerid][0]);
         PlayerTextDrawHide(playerid, ID_Security_Icon[playerid][1]);
     }
+}
+
+#include <YSI_Coding\y_hooks>
+hook OnPlayerConnect(playerid){
+    Character_Cash[playerid] = 100;
+    return 1;
 }
 
 YCMD:wallet(playerid, params[], help){

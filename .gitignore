@@ -22,7 +22,7 @@ server.cfg
 
 # NTD directory
 NTD/
-Texture Studio Server/
+Texture Studio/
 
 # binaries
 *.exe

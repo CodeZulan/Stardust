@@ -13,6 +13,7 @@ enum{
 #define MESSAGE_SPLIT_LENGTH        96
 
 native SendClientMessageStr(playerid, color, AmxString:message) = SendClientMessage;
+native Create3DTextLabelStr(AmxString:message, color, Float:X, Float:Y, Float:Z, Float:DrawDistance, virtualworld, testLOS) = Create3DTextLabel;
 
 SendSplitMessage(playerid, const message[], color){
     static fstring[MAX_STRING];
@@ -70,6 +71,7 @@ SendFadingMessage(playerid, const message[], Float:range=MESSAGE_LOCAL, fade1=CO
 SendCustomMessage(playerid, type, const fmat[], va_args<>){
     static message[MAX_STRING];
     va_format(message, MAX_STRING, fmat, va_start<3>);
+    
     if(type == MESSAGE_HELP){
         return SendClientMessageStr(playerid, COLOR_PINK, str_format("HELP: "COL_WHITE"%s", message));
     }

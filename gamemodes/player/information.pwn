@@ -14,11 +14,14 @@ new
     Float:Character_Position[MAX_PLAYERS][4],
     Character_Interior[MAX_PLAYERS],
     Character_World[MAX_PLAYERS],
-    Character_Skin[MAX_PLAYERS],
+    Character_Skin[MAX_PLAYERS];
 
-    Character_Cash[MAX_PLAYERS],
-    bool:Character_ID[MAX_PLAYERS],
-    bool:Character_Drivers_License[MAX_PLAYERS];
+enum{
+    CHECKPOINT_INVALID = -1,
+    CP_BUS_STARTROUTE,
+};
+
+new Player_Checkpoint[MAX_PLAYERS] = {CHECKPOINT_INVALID, ...};
 
 hook OnGameModeInit(){
     Log(LOG_MODULE, "[player/] Player information loaded...");
@@ -38,7 +41,6 @@ hook OnPlayerConnect(playerid){
     Character_Position[playerid][3] = 270.0;
     Character_Interior[playerid] = 0;
     Character_World[playerid] = 0;
-    Character_Cash[playerid] = 100;
 
     SetPVarInt(playerid, "IsPlayerLoggedIn", 0);
     SetPVarInt(playerid, "IsPlayerLoggingIn", 0);

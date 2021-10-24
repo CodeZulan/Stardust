@@ -65,6 +65,7 @@
 #include "player/groups.pwn"
 // -- {Inventory Submodule}
 #include "player/inventory/wallet.pwn"
+#include "player/inventory/vehicle_keys.pwn"
 // - {Authentication Submodule}
 #include "authentication/check.pwn"
 #include "authentication/creation.pwn"
@@ -76,6 +77,10 @@
 #include "roleplay/chat.pwn"
 // -- {Jobs Submodule}
 #include "roleplay/jobs/coach_driver.pwn"
+// -- {Farming Submodule}
+#include "roleplay/farming/farm_setup.pwn"
+#include "roleplay/farming/farming.pwn"
+#include "roleplay/farming/mappings.pwn"
 // - {Business Submodule}
 #include "business/casino/information.pwn"
 #include "business/casino/startup.pwn"
