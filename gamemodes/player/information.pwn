@@ -21,8 +21,6 @@ enum{
     CP_BUS_STARTROUTE,
 };
 
-new Player_Checkpoint[MAX_PLAYERS] = {CHECKPOINT_INVALID, ...};
-
 hook OnGameModeInit(){
     Log(LOG_MODULE, "[player/] Player information loaded...");
     return 1;

@@ -745,6 +745,8 @@ public HideWelcomeScreen(playerid){
     DestroyDynamicObject(Cutscene_Plane[playerid]);
 
     SetPVarInt(playerid, "IsPlayerLoggedIn", 1);
+
+    StopAudioStreamForPlayer(playerid);
     return 1;
 }
 

@@ -66,6 +66,8 @@ hook OnPlayerConnect(playerid){
     PlayerTextDrawUseBox(playerid, Checking_Message_TD[playerid], 1);
     PlayerTextDrawSetProportional(playerid, Checking_Message_TD[playerid], 1);
     PlayerTextDrawSetSelectable(playerid, Checking_Message_TD[playerid], 0);
+
+    PlayAudioStreamForPlayer(playerid, "https://www.mboxdrive.com/Starman%20(2012%20Remaster).mp3");
     return 1;
 }
 

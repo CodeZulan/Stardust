@@ -9,6 +9,8 @@ new
     Opium_Seeds[MAX_PLAYERS];
 
 hook OnPlayerConnect(playerid){
+    Carrot_Seeds[playerid] = 0;
+    Cabbage_Seeds[playerid] = 0;
     Marijuana_Seeds[playerid] = 0;
     Opium_Seeds[playerid] = 0;
     return 1;

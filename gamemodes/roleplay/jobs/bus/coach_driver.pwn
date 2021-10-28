@@ -58,8 +58,6 @@ new
 new
     bool:Character_SignedContract[MAX_PLAYERS][MAX_CONTRACTS];
 
-    CreateDynamicCP(Float:x, Float:y, Float:z, Float:size, worldid = -1, interiorid = -1, playerid = -1, Float:streamdistance = 100.0)
-
 hook OnGameModeInit(){
     CreateDynamic3DTextLabel("Las Venturas Transits\n"COL_YELLOW"/signcontract", COLOR_LIME, 2563.9307, 1782.5321, 10.8203, 10.0);
 

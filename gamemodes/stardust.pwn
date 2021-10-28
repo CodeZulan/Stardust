@@ -53,6 +53,7 @@
 #include "coding/checker.pwn"
 #include "coding/message.pwn"
 #include "coding/log.pwn"
+#include "coding/checkpoints.pwn"
 // - {Misc Submodule}
 #include "misc/mappings/lampposts.pwn"
 #include "misc/mappings/airport.pwn"
@@ -76,7 +77,8 @@
 #include "roleplay/commands.pwn"
 #include "roleplay/chat.pwn"
 // -- {Jobs Submodule}
-#include "roleplay/jobs/coach_driver.pwn"
+#include "roleplay/jobs/bus/coach_driver.pwn"
+#include "roleplay/jobs/bus/mappings.pwn"
 // -- {Farming Submodule}
 #include "roleplay/farming/farm_setup.pwn"
 #include "roleplay/farming/farming.pwn"
